@@ -1,52 +1,61 @@
 import streamlit as st
 import pandas as pd
-from pathlib import Path
-
-BASE_DIR = Path(__file__).resolve().parent
-DATA_PATH = BASE_DIR / "data" / "processed" / "car-dataset-cleaned-2025.csv"
+from src.utils import load_data
 
 try:
     # Save the dataset in a dataframe
-    df = pd.read_csv(DATA_PATH)
+    df = load_data()
     # Streamlit App
     st.set_page_config(page_title="Home",
-                       page_icon=":home:",
+                       page_icon=":house:",
                        layout="wide",
                        initial_sidebar_state="expanded")
     # Title of the home page
-    st.title("Car Analytics Dashboard",
+    st.title("CarInsight 2025",
              text_alignment="center")
-    tab1, tab2, tab3, tab4, tab5 = st.tabs(5)
-    with tab1:
-        st.image(r"Car-analytics-dashboard\images\audi.png", width=300)
-    with tab2:
-        st.image(r"Car-analytics-dashboard\images\ferrari.png", width=220)
-    with tab3:
-        st.image(r"Car-analytics-dashboard\images\ford.png", width=300)
-    with tab4:
-        st.image(r"Car-analytics-dashboard\images\lamborghini.png", width=250)
-    with tab5:
-        st.image(r"Car-analytics-dashboard\images\mercedes.png", width=300)
+    # App objective
+    st.markdown("""
+                **CarInsight** es una aplicación interactiva de análisis del mercado automotor global 2025. A partir de un dataset de autos de distintas marcas y características técnicas, permite explorar, comparar y entender qué hay detrás del precio de un auto, e incluso predecirlo.
+                """,
+                text_alignment="left")
+    st.divider()
+    st.markdown("""
+                La app está dividida en cuatro secciones:\n
+                - `Explorador` — navegá el dataset completo con filtros por marca, combustible, precio y potencia. Exportá los resultados que te interesen.
+                - `Comparador` — elegí dos autos y enfrentalos cara a cara: specs técnicos, precio y rendimiento en un gráfico de radar.
+                - `Análisis de Precio` — descubrí qué variables impactan más en el precio a través de gráficos de distribución, dispersión y correlaciones.
+                - `Predictor` — ingresá las características de un auto y obtené una estimación de precio basada en un modelo de Machine Learning entrenado con los datos del dataset.
+                """)
     # KPIs
-    col6, col7, col8, col9 = st.columns(4)
-    with col6:
-        st.metric(label="Average Price",
+    st.header("**Métricas generales**")
+    col1, col2, col3, col4, col5, col6 = st.columns(6)
+    with col1:
+        st.metric(label="Precio Promedio",
                   value="$" + str(round(df["price"].mean(), 2)),
                   border=True)
-    with col7:
-        st.metric(label="Average Horse Power",
-                  value=round(df["horse_power"].mean(), 2),
+    with col2:
+        st.metric(label="Promedio de Caballos de Fuerza",
+                  value=str(round(df["horse_power"].mean(), 2)) + " hp",
                   border=True)
-    with col8:
-        st.metric(label="Average Top Speed",
+    with col3:
+        st.metric(label="Velocidad Máxima Promedio",
                   value=str(round(df["top_speed"].mean(), 2)) + " km/h",
                   border=True)
-    with col9:
-        st.metric(label="Electric Cars Percentage",
+    with col4:
+        st.metric(label="Porcentaje de Autos Eléctricos",
                   value=(len(df[df["engine"] == "electric"]) / len(df)),
                   border=True,
                   format="percent")
-    st.title("**Construir una aplicación interactiva en Streamlit que permitía explorar y filtrar los autos de forma dinámica**")
-    
+    with col5:
+        st.metric(label="Cantidad de Marcas",
+                  value=len(df["brand"].unique()),
+                  border=True)
+    with col6:
+        st.metric(label="Cantidad de Modelos",
+                  value=len(df["model"].unique()),
+                  border=True,
+                  format="compact")
+    marcas = df["brand"].str.title().sort_values().unique()
+    st.dataframe(pd.DataFrame(marcas, columns=["Marca"]))
 except FileNotFoundError:
     print("El archivo o la ruta no existen.")
