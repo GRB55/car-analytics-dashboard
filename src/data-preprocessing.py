@@ -2,10 +2,9 @@ import pandas as pd
 from pathlib import Path
 
 # Data file path
-BASE_DIR = Path.cwd().parent
+BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_PATH = BASE_DIR / "data" / "raw"
-FILE_PATH = "Cars Datasets 2025.csv"
-data = DATA_PATH / FILE_PATH
+data = DATA_PATH / "Cars-Datasets-2025.csv"
 
 # Load the data in a dataframe
 df = pd.read_csv(data, encoding="utf-8", encoding_errors="ignore")
