@@ -3,13 +3,13 @@ import pandas as pd
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-DATA_PATH = BASE_DIR / "data" / "processed"
+DATA_PATH = BASE_DIR / "data" / "processed" / "car-dataset-cleaned-2025.csv"
 
 try:
-    file = DATA_PATH / "car-dataset-cleaned-2025.csv"
-    df = pd.read_csv(file)
+    # Save the dataset in a dataframe
+    df = pd.read_csv(DATA_PATH)
     # Streamlit App
-    st.set_page_config(page_title="EDA",
+    st.set_page_config(page_title="Exploration",
                        page_icon=":graph:",
                        layout="wide",
                        initial_sidebar_state="expanded")

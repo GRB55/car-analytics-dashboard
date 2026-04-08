@@ -1,9 +1,13 @@
 import streamlit as st
 import pandas as pd
-from load_data import load_data
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+DATA_PATH = BASE_DIR / "data" / "processed" / "car-dataset-cleaned-2025.csv"
 
 try:
-    df = load_data()
+    # Save the dataset in a dataframe
+    df = pd.read_csv(DATA_PATH)
     # Streamlit App
     st.set_page_config(page_title="Home",
                        page_icon=":home:",
