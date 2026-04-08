@@ -20,18 +20,24 @@ try:
     col1, col2, col3, col4 = st.columns(4)
     with col1:
         st.metric(label="Average Price",
-                  value=round(df["price"].mean(), 2),
-                  border=True,
-                  format="dollar")
+                  value="$" + str(round(df["price"].mean(), 2)),
+                  border=True)
     with col2:
         st.metric(label="Average Horse Power",
                   value=round(df["horse_power"].mean(), 2),
                   border=True)
     with col3:
         st.metric(label="Average Top Speed",
-                  value=round(df["max_speed"].mean(), 2),
-                  border=True)
-    # st.metric(label="Electric Cars Percentage")
-        
+                  value=str(round(df["top_speed"].mean(), 2)) + " km/h",
+                  border=True,
+                  )
+    with col4:
+        st.metric(label="Electric Cars Percentage",
+                  value=(len(df[df["engine"] == "electric"]) / len(df)),
+                  border=True,
+                  format="percent")
+    st.image(r"Car-analytics-dashboard\images\7ET5CJ6I6NDO3PIWOFG66PZB2I.jpg",
+             width=1750,
+             caption="Picture of the Ferrari Amalfi V8 biturbo")
 except FileNotFoundError:
     print("El archivo o la ruta no existen.")
