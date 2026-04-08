@@ -16,6 +16,9 @@ try:
     # Title of the home page
     st.title("Car Analytics Dashboard",
              text_alignment="center")
+    container = st.container()
+    with container:
+        st.image(r"Car-analytics-dashboard\images\png-transparent-laferrari-car-logo-scuderia-ferrari-ferrari-horse-emblem-logo-thumbnail.png")
     # KPIs
     col1, col2, col3, col4 = st.columns(4)
     with col1:
@@ -35,9 +38,6 @@ try:
                   value=(len(df[df["engine"] == "electric"]) / len(df)),
                   border=True,
                   format="percent")
-    # Car image
-    st.image(r"Car-analytics-dashboard\images\7ET5CJ6I6NDO3PIWOFG66PZB2I.jpg",
-             width=1750,
-             caption="Picture of the Ferrari Amalfi V8 biturbo")
+    st.title("**Construir una aplicación interactiva en Streamlit que permitía explorar y filtrar los autos de forma dinámica**")
 except FileNotFoundError:
     print("El archivo o la ruta no existen.")
