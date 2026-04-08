@@ -29,13 +29,13 @@ try:
     with col3:
         st.metric(label="Average Top Speed",
                   value=str(round(df["top_speed"].mean(), 2)) + " km/h",
-                  border=True,
-                  )
+                  border=True)
     with col4:
         st.metric(label="Electric Cars Percentage",
                   value=(len(df[df["engine"] == "electric"]) / len(df)),
                   border=True,
                   format="percent")
+    # Car image
     st.image(r"Car-analytics-dashboard\images\7ET5CJ6I6NDO3PIWOFG66PZB2I.jpg",
              width=1750,
              caption="Picture of the Ferrari Amalfi V8 biturbo")
