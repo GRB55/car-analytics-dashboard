@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 from pathlib import Path
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent
 DATA_PATH = BASE_DIR / "data" / "processed" / "car-dataset-cleaned-2025.csv"
 
 try:
@@ -16,16 +16,16 @@ try:
     # Title of the home page
     st.title("Car Analytics Dashboard",
              text_alignment="center")
-    col1, col2, col3, col4, col5 = st.columns(5)
-    with col1:
+    tab1, tab2, tab3, tab4, tab5 = st.tabs(5)
+    with tab1:
         st.image(r"Car-analytics-dashboard\images\audi.png", width=300)
-    with col2:
+    with tab2:
         st.image(r"Car-analytics-dashboard\images\ferrari.png", width=220)
-    with col3:
+    with tab3:
         st.image(r"Car-analytics-dashboard\images\ford.png", width=300)
-    with col4:
+    with tab4:
         st.image(r"Car-analytics-dashboard\images\lamborghini.png", width=250)
-    with col5:
+    with tab5:
         st.image(r"Car-analytics-dashboard\images\mercedes.png", width=300)
     # KPIs
     col6, col7, col8, col9 = st.columns(4)
