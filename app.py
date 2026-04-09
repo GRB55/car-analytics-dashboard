@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from src.utils import load_data
+from utils import load_data
 
 try:
     # Save the dataset in a dataframe
