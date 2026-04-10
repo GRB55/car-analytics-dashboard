@@ -57,6 +57,39 @@ try:
             st.metric(label="Cantidad Asientos",
                       value=filtrar_auto_seleccionado2["seats"].max(),
                       border=True)
-    
+    st.divider()
+    if auto_seleccionado1 and auto_seleccionado2:
+        columnas = ["horse_power", "top_speed", "price", "seats"]
+        categorias = ["HP", "Velocidad", "Precio", "Asientos"]
+        
+        def normalizar(dataframe, column):
+            return round(dataframe[column].mean() / dataframe[column].max(), 4)
+        
+        valores_auto1 = [normalizar(filtrar_auto_seleccionado1, col) for col in columnas]
+        valores_auto2 = [normalizar(filtrar_auto_seleccionado2, col) for col in columnas]
+        
+        fig = go.Figure()
+        fig.add_trace(
+            go.Scatterpolar(
+                r=valores_auto1,
+                theta=categorias,
+                fill="toself",
+                name=auto_seleccionado1
+            )
+        )
+        fig.add_trace(
+            go.Scatterpolar(
+                r=valores_auto2,
+                theta=categorias,
+                fill="toself",
+                name=auto_seleccionado2
+            )
+        )
+        fig.update_layout(
+            polar=dict(radialaxis=dict(visible=True, range=[0, 1])),
+            title="Comparación de autos",
+            showlegend=True
+        )
+        st.plotly_chart(fig, use_container_width=True)
 except FileNotFoundError:
     print("El archivo o la ruta no existen.")
