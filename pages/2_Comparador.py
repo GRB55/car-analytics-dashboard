@@ -27,14 +27,17 @@ try:
             st.metric(label="HP Promedio", 
                       value=str(round(filtrar_auto_seleccionado1["horse_power"].mean(), 2)) + " hp", 
                       border=True)
+            st.info(f"""Tipo de Motor: {filtrar_auto_seleccionado1['engine'].values[0]}  
+                        Combustible utilizado: {filtrar_auto_seleccionado1['fuel_type'].values[0]}""")
             st.metric(label="Velocidad Máxima", 
                       value=str(round(filtrar_auto_seleccionado1["top_speed"].max(), 2)) + " km/h", 
                       border=True)
             st.metric(label="Precio Promedio", 
                       value=filtrar_auto_seleccionado1["price"].mean(), 
                       border=True, format="dollar")
-            st.info(f"""Tipo de Motor: {filtrar_auto_seleccionado1['engine'].values[0]}  
-                        Combustible utilizado: {filtrar_auto_seleccionado1['fuel_type'].values[0]}""")
+            st.metric(label="Cantidad Asientos",
+                      value=filtrar_auto_seleccionado1["seats"].max(),
+                      border=True)
     with col2:
         auto_seleccionado2 = st.selectbox(label="**SEGUNDO MODELO**", index=None, options=opciones_autos, placeholder="Selecciona un modelo")
         if auto_seleccionado2:
@@ -42,13 +45,17 @@ try:
             st.metric(label="HP Promedio", 
                       value=str(round(filtrar_auto_seleccionado2["horse_power"].mean(), 2)) + " hp", 
                       border=True)
+            st.info(f"""Tipo de Motor: {filtrar_auto_seleccionado2['engine'].values[0]}  
+                        Combustible utilizado: {filtrar_auto_seleccionado2['fuel_type'].values[0]}""")
             st.metric(label="Velocidad Máxima", 
                       value=str(round(filtrar_auto_seleccionado2["top_speed"].max(), 2)) + " km/h", 
                       border=True)
             st.metric(label="Precio Promedio", 
                       value=filtrar_auto_seleccionado2["price"].mean(), 
                       border=True, format="dollar")
-            st.info(f"""Tipo de Motor: {filtrar_auto_seleccionado2['engine'].values[0]}  
-                        Combustible utilizado: {filtrar_auto_seleccionado2['fuel_type'].values[0]}""")
+            st.metric(label="Cantidad Asientos",
+                      value=filtrar_auto_seleccionado2["seats"].max(),
+                      border=True)
+            
 except FileNotFoundError:
     print("El archivo o la ruta no existen.")
