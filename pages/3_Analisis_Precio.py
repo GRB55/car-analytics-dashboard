@@ -52,7 +52,7 @@ try:
                           x="horse_power", y="price", symbol="fuel_type",
                           color="fuel_type", size="horse_power",
                           color_discrete_sequence=px.colors.qualitative.Alphabet,
-                          category_orders=dict(brand=sorted(df["fuel_type"].unique())))
+                          category_orders=dict(fuel_type=sorted(df["fuel_type"].unique())))
         fig1.update_layout(
             xaxis_title_text = "HP",
             yaxis_title_text = "Precio",
