@@ -27,18 +27,21 @@ try:
         st.plotly_chart(fig)
         fig1 = px.scatter(data_frame=df,
                           x="horse_power", y="price",
-                          color="brand", size="horse_power",
-                          color_discrete_sequence=px.colors.sequential.Viridis)
+                          color="brand", size="horse_power", symbol="brand",
+                          color_discrete_sequence=px.colors.qualitative.Light24,
+                          category_orders=dict(brand=sorted(df["brand"].unique())))
         fig1.update_layout(
             xaxis_title_text = "HP",
-            yaxis_title_text = "Precio"
+            yaxis_title_text = "Precio",
+            legend_title_text = "Marca",
+            legend = dict(font=dict(size=11), itemsizing="constant")
         )
         st.plotly_chart(fig1)
     with tab2:
         combustible_ordenados = df.groupby("fuel_type")["price"].mean().sort_values(ascending=False).index
         fig = px.histogram(data_frame=df, 
-                           x="fuel_type", y="price", orientation="v", 
-                           color_discrete_sequence=['tomato'], opacity=0.75,
+                           x="fuel_type", y="price", opacity=0.75,
+                           color_discrete_sequence=['tomato'], 
                            histfunc="avg", category_orders=dict(fuel_type = combustible_ordenados))
         fig.update_layout(
             xaxis_title_text = "Combustible",
@@ -46,12 +49,15 @@ try:
         )
         st.plotly_chart(fig)
         fig1 = px.scatter(data_frame=df,
-                          x="horse_power", y="price",
+                          x="horse_power", y="price", symbol="fuel_type",
                           color="fuel_type", size="horse_power",
-                          color_discrete_sequence=px.colors.sequential.Viridis)
+                          color_discrete_sequence=px.colors.qualitative.Alphabet,
+                          category_orders=dict(brand=sorted(df["fuel_type"].unique())))
         fig1.update_layout(
             xaxis_title_text = "HP",
-            yaxis_title_text = "Precio"
+            yaxis_title_text = "Precio",
+            legend_title_text = "Combustible",
+            legend = dict(font=dict(size=11), itemsizing="constant")
         )
         st.plotly_chart(fig1)
 except FileNotFoundError:
