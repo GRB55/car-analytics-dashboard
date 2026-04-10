@@ -1,5 +1,6 @@
 import streamlit as st
 import plotly.graph_objects as go
+import numpy as np
 from utils import load_data
 
 try:
@@ -18,7 +19,7 @@ try:
              text_alignment="center")
     st.markdown("*Selecciona 2 autos que queres que sean comparados*", text_alignment="center")
     st.divider()
-    opciones_autos = df["car_name"].unique()
+    opciones_autos = df["car_name"].sort_values().unique()
     col1, col2 = st.columns(2)
     with col1:
         auto_seleccionado1 = st.selectbox(label="**PRIMER MODELO**", index=None, options=opciones_autos, placeholder="Selecciona un modelo")
@@ -56,6 +57,6 @@ try:
             st.metric(label="Cantidad Asientos",
                       value=filtrar_auto_seleccionado2["seats"].max(),
                       border=True)
-            
+    
 except FileNotFoundError:
     print("El archivo o la ruta no existen.")
