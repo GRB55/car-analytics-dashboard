@@ -8,7 +8,7 @@ try:
     df["car_name"] = df["brand"] + " " + df["model"]
     for col in df.select_dtypes(include="object").columns:
         df[col] = df[col].str.title()
-    # Streamlit App
+    # Streamlit page
     st.set_page_config(page_title="Comparador",
                        page_icon=":crossed_swords:",
                        layout="wide",
@@ -88,6 +88,6 @@ try:
             polar=dict(radialaxis=dict(visible=True, range=[0, 1])),
             showlegend=True
         )
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 except FileNotFoundError:
     print("El archivo o la ruta no existen.")

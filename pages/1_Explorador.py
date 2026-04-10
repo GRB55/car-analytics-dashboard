@@ -4,7 +4,7 @@ from utils import load_data
 try:
     # Save the dataset in a dataframe
     df = load_data()
-    # Streamlit App
+    # Streamlit page
     st.set_page_config(page_title="Explorador",
                        page_icon=":mag_right:",
                        layout="wide",
