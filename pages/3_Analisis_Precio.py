@@ -3,16 +3,17 @@ import plotly.express as px
 from utils import load_data, filtrar_outliers
 
 try:
-    # Save the dataset in a dataframe
+    # Guardar el dataset en un marco de datos
     df = load_data()
     # Streamlit page
     st.set_page_config(page_title="Análisis de Precio",
                        page_icon=":bar_chart:",
                        layout="wide",
                        initial_sidebar_state="expanded")
-    # Title of the home page
+    # Titulo de la home page
     st.title("Análisis de Precios",
              text_alignment="center")
+    # Desarrollo de la pagina
     tab1, tab2, tab3 = st.tabs(["Marca", "Combustible", "Correlaciones"])
     with tab1:
         outliers_on = st.toggle(label="Mostrar valores atípicos", value=True, key="Outliers marcas")

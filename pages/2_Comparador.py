@@ -3,7 +3,7 @@ import plotly.graph_objects as go
 from utils import load_data
 
 try:
-    # Save the dataset in a dataframe
+    # Guardar el dataset en un marco de datos
     df = load_data()
     df["car_name"] = df["brand"] + " " + df["model"]
     for col in df.select_dtypes(include="object").columns:
@@ -13,7 +13,7 @@ try:
                        page_icon=":crossed_swords:",
                        layout="wide",
                        initial_sidebar_state="expanded")
-    # Title of the home page
+    # Titulo de la home page
     st.title("Comparador de autos",
              text_alignment="center")
     st.markdown("*Selecciona 2 autos que queres que sean comparados*", text_alignment="center")

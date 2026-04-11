@@ -2,14 +2,14 @@ import streamlit as st
 from utils import load_data
 
 try:
-    # Save the dataset in a dataframe
+    # Guardar el dataset en un marco de datos
     df = load_data()
     # Streamlit page
     st.set_page_config(page_title="Explorador",
                        page_icon=":mag_right:",
                        layout="wide",
                        initial_sidebar_state="expanded")
-    # Title of the home page
+    # Titulo de la home page
     st.title("Explorador de Datos",
              text_alignment="center")
     st.divider()

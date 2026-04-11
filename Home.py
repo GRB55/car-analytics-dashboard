@@ -3,17 +3,17 @@ import pandas as pd
 from utils import load_data
 
 try:
-    # Save the dataset in a dataframe
+    # Guardar el dataset en un marco de datos
     df = load_data()
     # Streamlit App
     st.set_page_config(page_title="Home",
                        page_icon=":house:",
                        layout="wide",
                        initial_sidebar_state="expanded")
-    # Title of the home page
+    # Titulo de la home page
     st.title("CarInsight 2025",
              text_alignment="center")
-    # App objective
+    # Objetivo de la app
     st.markdown("""
                 **CarInsight** es una aplicación interactiva de análisis del mercado automotor global 2025. A partir de un dataset de autos de distintas marcas y características técnicas, permite explorar, comparar y entender qué hay detrás del precio de un auto, e incluso predecirlo.
                 """,
