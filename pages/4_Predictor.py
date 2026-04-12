@@ -50,9 +50,24 @@ try:
     pipeline_rf.fit(X_train, y_train)
     # Predicciones rf
     rf_y_pred = pipeline_rf.predict(X_test)
-    # Métricas
+    # Métricas rf
     rf_mse = mean_squared_error(y_test, rf_y_pred)
     rf_rmse = root_mean_squared_error(y_test, rf_y_pred)
     rf_r2 = r2_score(y_test, rf_y_pred)
+    # Pipeline lr
+    pipeline_lr = Pipeline(
+        steps=[
+            ("preprocessor", preprocesador),
+            ("model", lr)
+        ]
+    )
+    # Entrenamiento lr
+    pipeline_lr.fit(X_train, y_train)
+    # Predicciones lr
+    lr_y_pred = pipeline_lr.predict(X_test)
+    # Métricas lr
+    lr_mse = mean_squared_error(y_test, lr_y_pred)
+    lr_rmse = root_mean_squared_error(y_test, lr_y_pred)
+    lr_r2 = r2_score(y_test, lr_y_pred)
 except FileNotFoundError:
     print("El archivo o la ruta no existen.")
