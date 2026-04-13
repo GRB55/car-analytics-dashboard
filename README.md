@@ -6,7 +6,7 @@ Aplicación interactiva de análisis del mercado automotor global 2025. Permite 
 
 ## 📸 Demo
 
-
+![Homepage](Homepage.png)
 ---
 
 ## 📁 Estructura del proyecto
@@ -96,4 +96,4 @@ Columnas originales: `Company`, `Car Name`, `Engine`, `CC/Battery`, `HP`, `Speed
 
 ## 👤 Autor
 
-**Gonzalo** — [@GRB55](https://github.com/GRB55)
+**Gonzalo Rios Barcelo** — [@GRB55](https://github.com/GRB55)
