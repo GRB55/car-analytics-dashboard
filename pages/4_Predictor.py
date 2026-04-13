@@ -80,7 +80,48 @@ try:
     # Titulo de la home page
     st.title("Predictor de Precios",
              text_alignment="center")
+    st.header("Performance de los modelos")
     st.dataframe(resultados)
     st.success(f"Mejor modelo: {resultados.iloc[0]['Modelo']}")
+    st.error(f"Peor modelo: {resultados.iloc[5]['Modelo']}")
+    with st.form("Introduce los datos para predecir el valor de un auto:"):
+        modelo_pred = st.selectbox("Modelo predictivo", options=modelos.keys())
+        marca_auto = st.selectbox("Marca de auto", options=df["brand"].unique())
+        modelo_auto = st.selectbox("Modelo de auto", options=df["model"].unique())
+        motor_auto = st.selectbox("Motor de auto", options=df["engine"].unique())
+        combustible = st.selectbox("Combustible del auto", options=df["fuel_type"].unique())
+        bateria = st.number_input("Capacidad de la bateria", min_value=0.0, max_value=df["battery_capacity"].max())
+        hp = st.number_input(label="HP", min_value=0, max_value=df["horse_power"].max())
+        velocidad_max = st.number_input(label="Velocidad maxima (km/h)", min_value=0, max_value=df["top_speed"].max())
+        performance = st.number_input(label="Performance", min_value=0.0, max_value=df["performance"].max())
+        asientos = st.number_input(label="Cantidad de asientos", min_value=0, max_value=df["seats"].max())
+        torque = st.number_input(label="Capacidad de torque", min_value=0.0, max_value=df["torque"].max())
+        enviar = st.form_submit_button("Entrenar")
+        if enviar:
+            with st.spinner(f"Entrenando {modelo_pred}", show_time=True):
+                new_data = pd.DataFrame([{
+                    "brand": marca_auto,
+                    "model": modelo_auto,
+                    "engine": motor_auto,
+                    "battery_capacity": bateria,
+                    "horse_power": hp,
+                    "top_speed": velocidad_max,
+                    "performance": performance,
+                    "fuel_type": combustible,
+                    "seats": asientos,
+                    "torque": torque
+                }])
+                pipeline = Pipeline(
+                    steps=[
+                        ("preprocessor", clone(preprocesador)),
+                        ("model", modelos[modelo_pred])
+                    ]
+                )
+                # Entrenamiento
+                pipeline.fit(X_train, y_train)
+                # Predicciones
+                y_pred = pipeline.predict(new_data)
+                # Precio predicho
+                st.success(f"Precio predicho: ${y_pred}")
 except FileNotFoundError:
     print("El archivo o la ruta no existen.")
