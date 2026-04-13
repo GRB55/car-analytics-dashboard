@@ -69,9 +69,7 @@ df["engine"] = df["engine"].str.lower()\
 
 df["fuel_type"] = df["fuel_type"].str.lower()\
     .str.replace(r"[-/,()\s+]+", " ", regex=True)\
-        .str.strip()\
-            .str.split()\
-                .apply(lambda x: " ".join(sorted(x)))
+        .str.strip()
 
 # Seat range cleaned into the max that the car can support
 df.loc[df["seats"] == "2+2", "seats"] = 4
@@ -82,8 +80,29 @@ df.loc[df["seats"] == "26", "seats"] = 6
 df.loc[df["seats"] == "27", "seats"] = 7
 df.loc[df["seats"] == "215", "seats"] = 15
 
-# Spelling mistake
-df.loc[df["fuel_type"] == "hyrbrid in plug", "fuel_type"] = "hybrid in plug"
+# Spelling mistake + normalization
+fuel_category_map = {
+        "plug in hyrbrid": "hybrid",    
+        "petrol": "petrol",
+        "diesel": "diesel",
+        "hybrid": "hybrid",
+        "electric": "electric",
+        "petrol diesel": "petrol",
+        "plug in hybrid": "hybrid",
+        "petrol awd": "petrol",
+        "petrol hybrid": "hybrid",
+        "hydrogen": "hydrogen",              
+        "diesel petrol": 'diesel',
+        "petrol ev": "petrol",
+        "hybrid electric": "hybrid",
+        "hybrid petrol": "hybrid",
+        "cng petrol": "hybrid",
+        "diesel hybrid": "hybrid",
+        "hybrid gas electric": "hybrid",
+        "gas hybrid": "hybrid",
+        "hybrid plug in": "hybrid"
+}
+df["fuel_type"] = df["fuel_type"].map(fuel_category_map)
 
 # Change the data type into the correct one
 df["price"] = pd.to_numeric(df["price"], errors="coerce")
@@ -92,7 +111,7 @@ df["top_speed"] = pd.to_numeric(df["top_speed"], errors="coerce")
 df["seats"] = pd.to_numeric(df["seats"], errors="coerce")
 df["torque"] = pd.to_numeric(df["torque"], errors="coerce")
 
-# Eliminate null values
+# Eliminate null values and duplicates
 df = df.dropna()
 
 # Export the clean data into a csv

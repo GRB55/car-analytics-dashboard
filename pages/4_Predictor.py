@@ -32,17 +32,17 @@ try:
     baja_card = [col for col in cat_cols if X_train[col].nunique() < 32]
     alta_card = [col for col in cat_cols if X_train[col].nunique() >= 32]
     # Preprocesamiento de datos
-    preprocesador = ColumnTransformer(
+    preprocesador_rf = ColumnTransformer(
         transformers=[
-            ("num", StandardScaler(), num_cols),
+            ("num", "passthrough", num_cols),
             ("onehot", OneHotEncoder(handle_unknown="ignore", sparse_output=False), baja_card),
-            ("target", TargetEncoder(), alta_card)
+            ("target", TargetEncoder(random_state=42), alta_card)
         ]
     )
     # Pipeline rf
     pipeline_rf = Pipeline(
         steps=[
-            ("preprocessor", preprocesador),
+            ("preprocessor", preprocesador_rf),
             ("model", rf)
         ]
     )
@@ -54,10 +54,18 @@ try:
     rf_mse = mean_squared_error(y_test, rf_y_pred)
     rf_rmse = root_mean_squared_error(y_test, rf_y_pred)
     rf_r2 = r2_score(y_test, rf_y_pred)
+    # Preprocesamiento de datos
+    preprocesador_lr = ColumnTransformer(
+        transformers=[
+            ("num", StandardScaler(), num_cols),
+            ("onehot", OneHotEncoder(handle_unknown="ignore", sparse_output=False), baja_card),
+            ("target", TargetEncoder(random_state=42), alta_card)
+        ]
+    )
     # Pipeline lr
     pipeline_lr = Pipeline(
         steps=[
-            ("preprocessor", preprocesador),
+            ("preprocessor", preprocesador_lr),
             ("model", lr)
         ]
     )

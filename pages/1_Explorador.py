@@ -14,7 +14,7 @@ try:
              text_alignment="center")
     st.divider()
     st.subheader("Conjunto de Datos Original")
-    st.dataframe(df, use_container_width=True)
+    st.dataframe(df, width="stretch")
     with st.sidebar:
         brand_filter = st.multiselect(label="Selecciona la marca",
                                       options=df["brand"].unique(),
