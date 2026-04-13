@@ -30,7 +30,7 @@ try:
         st.plotly_chart(fig)
         fig1 = px.scatter(data_frame=df_tab1,
                         x="horse_power", y="price",
-                        color="brand", size="horse_power", symbol="brand",
+                        color="brand", size="horse_power",
                         color_discrete_sequence=px.colors.qualitative.Light24,
                         category_orders=dict(brand=sorted(df_tab1["brand"].unique())))
         fig1.update_layout(

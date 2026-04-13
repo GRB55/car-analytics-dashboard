@@ -86,7 +86,8 @@ try:
         )
         fig.update_layout(
             polar=dict(radialaxis=dict(visible=True, range=[0, 1])),
-            showlegend=True
+            showlegend=True,
+            title="Comparación de autos"
         )
         st.plotly_chart(fig, width="stretch")
 except FileNotFoundError:

@@ -6,7 +6,7 @@ from sklearn.tree import DecisionTreeRegressor
 from sklearn.linear_model import LinearRegression
 from xgboost import XGBRegressor
 
-from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score, root_mean_squared_error
 
 from sklearn.base import clone
@@ -96,7 +96,7 @@ try:
         performance = st.number_input(label="Performance", min_value=0.0, max_value=df["performance"].max())
         asientos = st.number_input(label="Cantidad de asientos", min_value=0, max_value=df["seats"].max())
         torque = st.number_input(label="Capacidad de torque", min_value=0.0, max_value=df["torque"].max())
-        enviar = st.form_submit_button("Entrenar")
+        enviar = st.form_submit_button("Predecir precio")
         if enviar:
             with st.spinner(f"Entrenando {modelo_pred}", show_time=True):
                 new_data = pd.DataFrame([{
@@ -122,6 +122,6 @@ try:
                 # Predicciones
                 y_pred = pipeline.predict(new_data)
                 # Precio predicho
-                st.success(f"Precio predicho: ${y_pred}")
+                st.success(f"Precio predicho: ${y_pred[0]:,.2f}")
 except FileNotFoundError:
     print("El archivo o la ruta no existen.")

@@ -1,15 +1,15 @@
 import pandas as pd
 from pathlib import Path
 
-# Data file path
+# Ruta de los datos
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_PATH = BASE_DIR / "data" / "raw"
 data = DATA_PATH / "Cars-Datasets-2025.csv"
 
-# Load the data in a dataframe
+# Cargar los datos en un marcode datos
 df = pd.read_csv(data, encoding="utf-8", encoding_errors="ignore")
 
-# Change the variables names
+# Cambiar el nombre de las variables
 columns = {"Company Names": "brand",
            "Cars Names": "model",
            "Engines": "engine",
@@ -24,12 +24,7 @@ columns = {"Company Names": "brand",
 
 df.rename(columns=columns, inplace=True)
 
-# What chars were used to give a range of values in the variables
-for i in range(len(df["price"])):
-    if len(df["price"].str.strip()[i]) > 10:
-        print(df["price"][i])
-
-# Data cleaning
+# Limpieza de datos
 df["battery_capacity"] = df["battery_capacity"].str.replace("cc", "")\
     .str.replace(",", "")\
         .str.strip()\
@@ -71,7 +66,7 @@ df["fuel_type"] = df["fuel_type"].str.lower()\
     .str.replace(r"[-/,()\s+]+", " ", regex=True)\
         .str.strip()
 
-# Seat range cleaned into the max that the car can support
+# Normalizamos los valores incorrectos
 df.loc[df["seats"] == "2+2", "seats"] = 4
 df.loc[df["seats"] == "212", "seats"] = 12
 df.loc[df["seats"] == "29", "seats"] = 9
@@ -80,7 +75,7 @@ df.loc[df["seats"] == "26", "seats"] = 6
 df.loc[df["seats"] == "27", "seats"] = 7
 df.loc[df["seats"] == "215", "seats"] = 15
 
-# Spelling mistake + normalization
+# Normalizamos los tipos de combustible
 fuel_category_map = {
         "plug in hyrbrid": "hybrid",    
         "petrol": "petrol",
@@ -104,17 +99,17 @@ fuel_category_map = {
 }
 df["fuel_type"] = df["fuel_type"].map(fuel_category_map)
 
-# Change the data type into the correct one
+# Cambiar el tipo de datos al correcto
 df["price"] = pd.to_numeric(df["price"], errors="coerce")
 df["horse_power"] = pd.to_numeric(df["horse_power"], errors="coerce")
 df["top_speed"] = pd.to_numeric(df["top_speed"], errors="coerce")
 df["seats"] = pd.to_numeric(df["seats"], errors="coerce")
 df["torque"] = pd.to_numeric(df["torque"], errors="coerce")
 
-# Eliminate null values and duplicates
+# Eliminar valores nulos y duplicados
 df = df.dropna()
 df = df.drop_duplicates()
 
-# Export the clean data into a csv
-export_path = BASE_DIR /"data" / "processed" / "car-dataset-cleaned-2025.csv"
+# Exportar los datos limpios a un csv
+export_path = BASE_DIR /"data" / "processed" / "car_cleaned.csv"
 df.to_csv(export_path, index=False) 
