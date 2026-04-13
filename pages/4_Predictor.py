@@ -26,16 +26,16 @@ try:
     # Conjuntos de entrenamiento y prueba
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
     # Columnas
-    cat_cols = [col for col in X.columns if X[col].dtype == "object"]
-    num_cols = [col for col in X.columns if X[col].dtype != "object"]
+    cat_cols = [col for col in X_train.columns if X_train[col].dtype == "object"]
+    num_cols = [col for col in X_train.columns if X_train[col].dtype != "object"]
     # Separar en baja y alta cardinalidad
-    baja_card = [col for col in cat_cols if X[col].nunique() < 32]
-    alta_card = [col for col in cat_cols if X[col].nunique() >= 32]
+    baja_card = [col for col in cat_cols if X_train[col].nunique() < 32]
+    alta_card = [col for col in cat_cols if X_train[col].nunique() >= 32]
     # Preprocesamiento de datos
     preprocesador = ColumnTransformer(
         transformers=[
             ("num", StandardScaler(), num_cols),
-            ("onehot", OneHotEncoder(), baja_card),
+            ("onehot", OneHotEncoder(handle_unknown="ignore", sparse_output=False), baja_card),
             ("target", TargetEncoder(), alta_card)
         ]
     )
@@ -69,5 +69,20 @@ try:
     lr_mse = mean_squared_error(y_test, lr_y_pred)
     lr_rmse = root_mean_squared_error(y_test, lr_y_pred)
     lr_r2 = r2_score(y_test, lr_y_pred)
+    # Almacenamos los resultados en un marco de datos
+    resultados = pd.DataFrame({
+        "R2": [rf_r2, lr_r2],
+        "MSE": [rf_mse, lr_mse],
+        "RMSE": [rf_rmse, lr_rmse]
+    }, index=["Random Forest", "Regresión Lineal"])
+    # Streamlit page
+    st.set_page_config(page_title="Predictor de Precio",
+                       page_icon=":robot:",
+                       layout="wide",
+                       initial_sidebar_state="expanded")
+    # Titulo de la home page
+    st.title("Predictor de Precios",
+             text_alignment="center")
+    st.dataframe(resultados)
 except FileNotFoundError:
     print("El archivo o la ruta no existen.")
