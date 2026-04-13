@@ -1,19 +1,19 @@
 import streamlit as st
 import pandas as pd
 
-from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
+from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor, HistGradientBoostingRegressor
 from sklearn.tree import DecisionTreeRegressor
-from sklearn.svm import SVR
 from sklearn.linear_model import LinearRegression
 from xgboost import XGBRegressor
 
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score, root_mean_squared_error
 
+from sklearn.base import clone
 from sklearn.preprocessing import StandardScaler, OneHotEncoder, TargetEncoder
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
-from utils import load_data
+from utils import load_data, filtrar_outliers
 
 
 # Instanciamos modelos predictivos
@@ -21,10 +21,11 @@ rf = RandomForestRegressor(random_state=42, n_jobs=-1)
 
 try:
     # Guardar el dataset en un marco de datos
-    df = load_data()    
+    df = load_data()
+    df_sin_outliers = filtrar_outliers(df)
     # Características y objetivo
-    X = df.drop("price", axis=1)
-    y = df["price"]
+    X = df_sin_outliers.drop("price", axis=1)
+    y = df_sin_outliers["price"]
     # Conjuntos de entrenamiento y prueba
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
     # Columnas
@@ -41,23 +42,27 @@ try:
             ("target", TargetEncoder(random_state=42), alta_card)
         ]
     )
-    X_train = preprocesador.fit_transform(X_train)
-    X_test = preprocesador.transform(X_test)
     modelos = {
         "XGBoost": XGBRegressor(n_estimators=300, learning_rate=0.05, random_state=42),
-        "SVM": SVR(kernel="rbf", C=10),
         "Random Forest": RandomForestRegressor(n_estimators=300, random_state=42),
         "Gradient Boosting": GradientBoostingRegressor(n_estimators=300, learning_rate=0.05, random_state=42),
         "Árbol de Decisión": DecisionTreeRegressor(random_state=42),
-        "Regresión Lineal": LinearRegression()
+        "Regresión Lineal": LinearRegression(),
+        "Hist Gradient Boosting": HistGradientBoostingRegressor(learning_rate=0.05, random_state=42)
     }
     resultado = []
     for name, model in modelos.items():
         print(f"Entrenando {name}")
+        pipeline = Pipeline(
+            steps=[
+                ("preprocessor", clone(preprocesador)),
+                ("model", model)
+            ]
+        )
         # Entrenamiento
-        model.fit(X_train, y_train)
+        pipeline.fit(X_train, y_train)
         # Predicciones
-        y_pred = model.predict(X_test)
+        y_pred = pipeline.predict(X_test)
         # Metricas
         mae = mean_absolute_error(y_test, y_pred)
         mse = mean_squared_error(y_test, y_pred)
@@ -66,6 +71,7 @@ try:
         # Guardamos resultados
         resultado.append([name, mae, mse, rmse, r2])
     resultados = pd.DataFrame(resultado, columns=["Modelo", "MAE", "MSE", "RMSE", "R2"])
+    resultados = resultados.sort_values("R2", ascending=False)
     # Streamlit page
     st.set_page_config(page_title="Predictor de Precio",
                        page_icon=":robot:",
@@ -75,5 +81,6 @@ try:
     st.title("Predictor de Precios",
              text_alignment="center")
     st.dataframe(resultados)
+    st.success(f"Mejor modelo: {resultados.iloc[0]['Modelo']}")
 except FileNotFoundError:
     print("El archivo o la ruta no existen.")
