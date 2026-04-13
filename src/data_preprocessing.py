@@ -113,6 +113,7 @@ df["torque"] = pd.to_numeric(df["torque"], errors="coerce")
 
 # Eliminate null values and duplicates
 df = df.dropna()
+df = df.drop_duplicates()
 
 # Export the clean data into a csv
 export_path = BASE_DIR /"data" / "processed" / "car-dataset-cleaned-2025.csv"
